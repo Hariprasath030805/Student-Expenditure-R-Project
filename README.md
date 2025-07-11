@@ -1,12 +1,15 @@
 # Student-Expenditure-R-Project
 
 📌 Project Overview
+
 This project investigates student spending habits in campus canteens using data collected through a Google Forms survey. The data was analyzed using R programming, with models designed to visualize and predict expenditure behavior. The goal was to uncover patterns influenced by budgeting, social behavior, and academic schedules.
 
-The PDF includes:
+📌The PDF includes:
+
 📎 23BEC1064Hariprasathmreport.pdf
 
 Abstract & Introduction
+
 Literature Review
 
 Data Collection Methods
@@ -21,7 +24,7 @@ Discussion & Insights
 
 Limitations & References
 
-Methodology
+📌Methodology
 
 Survey Collection
 
@@ -29,7 +32,7 @@ Data was collected via a structured Google Form using snowball sampling.
 
 📎 gform.pdf contains the original questionnaire.
 
-Data Analysis & Modeling in R
+📌Data Analysis & Modeling in R
 
 Four R-based models were implemented:
 
@@ -41,7 +44,7 @@ Model 3: Bar Graph Visualization of Survey Inputs
 
 Model 4: Hypothesis Testing (cash vs mobile payments)
 
-Visualization Tools
+📌Visualization Tools
 
 ggplot2 for bar/pie/line graphs
 
