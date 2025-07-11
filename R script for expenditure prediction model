@@ -1,0 +1,210 @@
+m="reading the file and making the neccesary correction"
+library(readxl)
+data4 = read_excel("C:/Users/HARIPRASATH/OneDrive/Desktop/project.xlsx", sheet = 1)
+mc1=factor(data4$c1,levels = c("Daily","once","2-3 times","4-5 times"),labels = c(5,1,2.5,4.5))
+mc2=factor(data4$c2,levels = c("0-100","100-200","200-300","300-400","400-500","500+"),labels = c(50,150,250,350,450,550))
+mc3=factor(data4$c3,levels = c("I spend more during exam time.","I spend less during exam time.","My spending remains the same.","I do not visit the canteen during exam periods."),labels = c(3,1,2,0))
+mc4=factor(data4$c4,levels = c("It makes me spend more.","It makes me spend less.","It does not affect my spending.","I avoid the canteen during crowded times"),labels = c(3,1,2,0))
+mc5=factor(data4$c5,levels = c("Often, I follow popular trends.","Sometimes, if I see others enjoying it.","Rarely, I stick to my preferences.","Never, popularity does not influence me."),labels = c(3,2,1,0))
+cc6=data4$c6
+mc6={}
+for(i in 1:length(cc6)){
+  print(cc6[i])
+  text =cc6[i]
+  split_text = strsplit(text, ";")[[1]]
+  split_text
+  cd1=factor(split_text,levels = c("Lower prices for popular items.","Introduce more diverse food options.","Improve the dining environment and seating.","Implement eco-friendly practices."),labels = c(1,2,3,4))
+  mc6=c(mc6,cd1)
+}
+mc7=factor(data4$c7,levels=c("Frequently, due to hunger.","Occasionally, when I see something I like.","Rarely, usually planned purchases.","Never, I always plan my purchases."),labels=c(3,2,1,0))
+mc8=factor(data4$c8,levels=c("I spend more with friends.","I spend less with friends.","My spending is the same regardless of company.","I tend to spend more on social snacks/drinks with friends."),labels=c(3,2,1,4))
+mc9={}
+cc9=data4$c9
+for(i in 1:length(cc9)){
+  print(cc9[i])
+  text = cc9[i]
+  split_text = strsplit(text, ";")[[1]]
+  split_text
+  cd1=factor(split_text,levels = c("Quality of food","Variety of food","Convenience","Peer influence","Availability of favorite dishes","Special promotions or discounts","Special occasions (birthdays, celebrations)"),labels = c(1,2,3,4,5,6,7))
+  mc9=c(mc9,cd1)
+}
+mc10=factor(data4$c10,levels=c("Yes","No","Sometimes"),labels=c(1,-1,0))
+mc11={}
+cc11=data4$c11
+for(i in 1:length(cc11)){
+  print(cc11[i])
+  text = cc11[i]
+  split_text = strsplit(text, ";")[[1]]
+  split_text
+  cd1=factor(split_text,levels = c("Snacks","Meals","Beverages","Desserts"),labels = c(1,2,3,4))
+  mc11=c(mc11,cd1)
+}
+mc12=data4$c12
+mc13=factor(data4$c13,levels=c("cash","card","Mobile payment apps(e.g Google pay)"),labels=c(1,2,3))
+mc14=factor(data4$c14,levels=c("I spend more when using mobile payment apps.","I spend more when using cash.","I spend more when using card payments","My spending remains the same regardless of payment method."),labels=c(1,2,3,4))
+
+func1 <- function() {
+  inda1=data.frame(mc12,mc1,mc2,mc3,mc8)
+  inda1
+  model1= lm(mc12~mc1+mc2+mc3+mc8, data=inda1)
+  model1
+  ch1=readline(prompt=
+                 "How often do you visit the college canteen in a week?
+                  daily means enter 5 
+                  once means enter 1
+                  2-3 time means enter 2.5  
+                  4-5 time means enter 4.5\n")
+  ch2=readline(prompt=
+               "average how much do you spend in the canteen per visit?
+               the corresponding ranges enter the corrct value
+               [0-100,100-200,200-300,300-400,400-500,500+]
+               [50,150,250,350,450,550]\n")
+  
+  ch3=readline(prompt="How does your spending at the canteen change during exam periods compared to regular weeks?\nspend more 3\nspend less 1\nspending remains the same 2\nI do not visit the canteen 0 \n")
+  
+  ch4=readline(prompt=" How does your spending habits differ when you are with friends compared to when you are alone?\nspend more 3\nspend less 1\nspending remains the same 2\ni tend to spend more 4\n")
+  a1 = data.frame(
+    mc1 = factor(ch1, levels = levels(inda1$mc1)),
+    mc2 = factor(ch2, levels = levels(inda1$mc2)),
+    mc3 = factor(ch3,levels = levels(inda1$mc3)),
+    mc8 = factor(ch4, levels = levels(inda1$mc8))
+  )
+  r1 = predict(model1, a1)
+  print("the excepted maximum spending as per input is :")
+  print(ceiling(r1))
+  invisible(NULL)
+}
+
+func2 <- function() {
+  max_length = max(length(mc3), length(mc10), length(mc7),length(mc13),length(mc11))
+  mcc3 = c(mc3, rep(NA, max_length - length(mc3)))
+  mcc10 = c(mc10, rep(NA, max_length - length(mc10)))
+  mcc7 = c(mc7, rep(NA, max_length - length(mc7)))
+  mcc13 = c(mc13, rep(NA, max_length - length(mc13)))
+  mcc11 = c(mc11, rep(NA, max_length - length(mc11)))
+  inda2=data.frame(mcc11,mcc3,mcc10,mcc7,mcc13)
+  model2=lm(mcc11~mcc3+mcc10+mcc7+mcc13)
+  model2
+  ch1=readline(prompt="How does your spending at the canteen change during exam periods compared to regular weeks?\nspend more 3\nspend less 1\nspending remains the same 2\nI do not visit the canteen 0 \n")
+  ch2=readline(prompt="Do you find the prices at the canteen reasonable?\n yes 1\n no -1\n sometime0\n")
+  ch3=readline(prompt="How often do you make spontaneous purchases at the canteen, and what typically triggers these decisions?\nFrequently 3\nOccasionally 2\nRarely 1\nNever 0\n")
+  ch4=readline(prompt="What is your preferred method of payment in the canteen?\ncash 1\ncard 2\nmobile payment 3\n")
+  a2=data.frame(mcc3=as.integer(ch1),mcc10=as.integer(ch2),mcc7=as.integer(ch3),mcc13=as.integer(ch4))
+  r2 = predict(model2, a2)
+  li = floor(r2)
+  gi = ceiling(r2)
+  
+  gettingfoodname <- function(label_value) {
+    if (label_value == 1) {
+      return("Snacks")
+    } else if (label_value == 2) {
+      return("Meals")
+    } else if (label_value == 3) {
+      return("Beverages")
+    } else if (label_value == 4) {
+      return("Desserts")
+    } else {
+      return(NA)
+    }
+  }
+  print("the possible food are:")
+  print(gettingfoodname(li))
+  print(gettingfoodname(gi))
+  invisible(NULL)
+}
+
+func3<-function(){
+  show_option_2<-function(){  
+    cat("press 1 for how spending affect due to social atmosphere \n")
+    cat("press 2 for how popularity affects the spending \n")
+    cat("press 3 for what changes can be brought if you are given a chance \n")
+    cat("press 4 for factor influence spending in canteen \n")
+    cat("press 5 for how payment mode affects the spending \n")
+  }
+  show_option_2()
+  pg<-function(a){
+    par(mar = c(5, 4, 4, 8))
+    data =data.frame(column_name = a)
+    counts = as.data.frame(table(data$column_name))
+    counts 
+    bar_positions=barplot(height = counts$Freq,names.arg = counts$Var1,col = "skyblue",ylim = c(0, max(counts$Freq) * 1.2))
+    text(x = bar_positions,y = counts$Freq,label = counts$Freq,pos = 3,cex = 0.8,col = "black")     
+  }
+  ch=readline(prompt="enter the choice")
+  if (as.integer(ch) == 1) {
+    pg(mc4)
+    title(main = "How socail atmosphere affect the spending")
+    mtext("reason", side = 1, line = 3)   
+    mtext("Count", side = 2, line = 3) 
+    legend("topright",inset = c(-0.4, 0),title = "Legend", cex = 0.8,xpd = TRUE,           
+           legend = c("3 = More", "1 = less", "2 = does not", "0 = avoid"))
+  }else if(as.integer(ch)==2){
+    pg(mc5)
+    title(main = "Influence of popularity on choosing a food")
+    mtext("cases", side = 1, line = 3)   
+    mtext("Count", side = 2, line = 3) 
+    legend("topright",inset = c(-0.4, 0),title = "Legend", cex = 0.8,xpd = TRUE,           
+           legend = c("3 = often", "2 = sometimes", "1 = rarely", "0 = never"))
+  }else if(as.integer(ch)==3){
+    pg(mc6)
+    title(main = "change would you like to bring ")
+    mtext("changes", side = 1, line = 3)   
+    mtext("Count", side = 2, line = 3) 
+    legend("topright",inset = c(-0.4, 0),title = "Legend", cex = 0.8,xpd = TRUE,           
+           legend = c("1 = price⬇️", "2 = diverse food", "3 = ⬆️ environment ", "4 = 🌍🤝 practise"))
+  }else if(as.integer(ch)==4){
+    pg(mc9)
+    title(main = "factor influencing the spending ")
+    mtext("factor", side = 1, line = 3)   
+    mtext("Count", side = 2, line = 3) 
+    legend("topright",inset = c(-0.4, 0),title = "Legend", cex = 0.8,xpd = TRUE,           
+           legend = c("1 = quality", "2 = varitey", "3 =convenince", "4 = peer influence","5= favourite dish","6 = discount","7 = occasions"))
+  }else if(as.integer(ch)==5){
+    pg(mc14)
+    title(main="effect of payment mode in spending")
+    mtext("effect", side = 1, line = 3)   
+    mtext("Count", side = 2, line = 3) 
+    legend("topright",inset = c(-0.4, 0),title = "Legend", cex = 0.8,xpd = TRUE,           
+           legend = c("1 = More in apps", "2 = more in cash", "3 = more in card", "4 = constant"))
+  }else{
+    print("wrong choice")
+  }
+}
+
+func4<-function(){
+  df=data.frame(mc13,mc2)
+  mp=df$mc2[df$mc13==3]
+  cp=df$mc2[df$mc13==1]
+  mp = as.numeric(as.character(mp))
+  cp = as.numeric(as.character(cp))
+  t_test_result <- t.test(mp, cp, alternative = "two.sided")
+  print(t_test_result)
+  if (t_test_result$p.value < 0.05) {
+    cat("\nThere is a significant difference in spending between mobile payments and cash users (p < 0.05).\n")
+    cat("Students who prefer mobile payments tend to spend more.\n")
+  } else {
+    cat("\nThere is no significant difference in spending between mobile payments and cash users (p >= 0.05).\n")
+  }
+}
+
+if (as.integer(choice) == 1) {
+  func1()
+} else if (as.integer(choice) == 2) {
+  func2()
+} else if (as.integer(choice) == 3) {
+  func3()
+}else if (as.integer(choice) == 4) {
+  func4()
+}else {
+  cat("Invalid choice.\n")
+}
+
+show_options <- function() {
+  cat("The following operations can be done on the dataset:\n")
+  cat("Press 1 for predicting the output of how much a student can spend under some condition\n")
+  cat("Press 2 for predicting what type of food a student will choose under some condition\n")
+  cat("press 3 for plotting or summarising a column\n")
+  cat("press 4 for testing the hypotesis that there is no siginficant difference in spending with respect to payment mode \n")
+}
+show_options()
+choice=readline(prompt="Enter the choice")
